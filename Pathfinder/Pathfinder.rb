@@ -1,36 +1,36 @@
 # Made By Zak Freeman
 
-def create_table(rows, columns)
-  possible_ints = [0, 1, 2, 3, 4, 1]
-  $table = Array.new(rows, Array.new(columns, 0))
-end
-
-def number_of_paths(rows, columns)
-  x_pos = 0
-  y_pos = 0
-
-  until y_pos == rows && x_pos == columns
-    $table[y_pos][x_pos] = '.'
-    $table.each_slice(columns) {|x| print x.join, ("\n")}
-    if $table[y_pos][x_pos + 1] == 0
-      $table[y_pos][x_pos] = 0
-      x_pos += 1
-    elsif $table[y_pos + 1] == 0 || $table[y_pos][x_pos + 1].nil?
-      $table[y_pos][x_pos] = 0
-      y_pos += 1
-    else
-      puts "can't move"
-      break
-    end
-    gets
-    Gem.win_platform? ? (system "cls") : (system "clear")
-  end
-end
 print 'Width: '
 columns = gets.chomp.to_i
 print 'Height: '
 rows = gets.chomp.to_i
 
-p columns, rows
-create_table(rows, columns)
-number_of_paths(rows, columns)
+possible_ints = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+#possible_ints = [*?0..?9]
+table = Array.new
+rows.times do |x|
+  table.push([])
+  columns.times do
+    table[x].push(possible_ints.sample)
+  end
+end
+table[rows - 1][columns - 1] = 1
+table.each_slice(rows/columns) {|x| print x.join, ("\n")}
+
+x_pos = 0
+y_pos = 0
+
+def number_of_paths(table, x_pos, y_pos)
+  print "#{x_pos},#{y_pos}\n"
+  return if x_pos == table[0].length - 1 && y_pos == table.length - 1
+  if y_pos < table.length - 1
+    y_pos += 1
+  else
+    x_pos += 1
+  end
+  number_of_paths(table, x_pos, y_pos)
+end
+
+
+#table.each_slice(rows/columns) {|x| print x.join, ("\r\n")}
+number_of_paths(table, x_pos, y_pos)
