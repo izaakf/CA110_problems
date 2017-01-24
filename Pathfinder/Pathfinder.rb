@@ -5,7 +5,7 @@ columns = gets.chomp.to_i
 print 'Height: '
 rows = gets.chomp.to_i
 
-possible_ints = [1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
+possible_ints = [1, 1, 1, 1, 1, 1, 1, 1, 1]
 #possible_ints = [*?0..?9]
 table = Array.new
 rows.times do |x|
