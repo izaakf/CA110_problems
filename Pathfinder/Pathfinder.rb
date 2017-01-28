@@ -6,6 +6,7 @@ print 'Height: '
 rows = gets.chomp.to_i
 
 possible_ints = [1, 1, 1, 1, 1, 1, 1, 1, 1]
+#possible_ints = [*?0..?9]
 table = Array.new
 rows.times do |x|
   table.push([])
@@ -18,19 +19,16 @@ table.each do |n|
   puts n.each {|p| p }.join(' ')
 end
 
+
 x_pos = 0
 y_pos = 0
 
-def number_of_paths(table, x_pos, y_pos)
-  return print 'maze solved' if x_pos == table[0].length - 1 && y_pos == table.length - 1
-  if y_pos < table.length - 1 && table[y_pos+1][x_pos] == 1
-    y_pos += 1
-  elsif x_pos <table[y_pos].length - 1 && table[y_pos][x_pos + 1] == 1
-    x_pos += 1
-  else
-    return print 'maze cannot be solved'
-  end
-  number_of_paths(table, x_pos, y_pos)
+def number_of_paths(table, x_pos, y_pos, max_rows, max_cols)
+  return 1 if x_pos == max_cols && y_pos == max_rows
+  return 0 if x_pos > max_cols || y_pos > max_rows || table[y_pos][x_pos] != 1
+  return number_of_paths(table, x_pos, y_pos + 1, table.length - 1, table[0].length - 1) + number_of_paths(table, x_pos + 1, y_pos, table.length - 1, table[0].length - 1)
 end
 
-number_of_paths(table, x_pos, y_pos)
+
+#table.each_slice(rows/columns) {|x| print x.join, ("\r\n")}
+print number_of_paths(table, x_pos, y_pos, table.length - 1, table[0].length - 1)
