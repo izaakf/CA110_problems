@@ -5,8 +5,7 @@ columns = gets.chomp.to_i
 print 'Height: '
 rows = gets.chomp.to_i
 
-possible_ints = [1, 1, 1, 1, 1, 1, 1, 1, 1]
-#possible_ints = [*?0..?9]
+possible_ints = [1, 1, 1, 1, 1, 1, 1, 1, 0]
 table = Array.new
 rows.times do |x|
   table.push([])
@@ -15,6 +14,7 @@ rows.times do |x|
   end
 end
 table[rows - 1][columns - 1] = 1
+table[0][0] = 1
 table.each do |n|
   puts n.each {|p| p }.join(' ')
 end
@@ -26,7 +26,7 @@ y_pos = 0
 def number_of_paths(table, x_pos, y_pos, max_rows, max_cols)
   return 1 if x_pos == max_cols && y_pos == max_rows
   return 0 if x_pos > max_cols || y_pos > max_rows || table[y_pos][x_pos] != 1
-  return number_of_paths(table, x_pos, y_pos + 1, table.length - 1, table[0].length - 1) + number_of_paths(table, x_pos + 1, y_pos, table.length - 1, table[0].length - 1)
+  number_of_paths(table, x_pos, y_pos + 1, table.length - 1, table[0].length - 1) + number_of_paths(table, x_pos + 1, y_pos, table.length - 1, table[0].length - 1)
 end
 
 
