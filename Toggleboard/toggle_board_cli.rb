@@ -14,7 +14,7 @@ for y in 0..board_height-1
   end
 end
 
-def shoot
+def shoot(board)
   print "\r\nRow? "
   tile_y = gets.chomp.to_i
   print "Column? "
@@ -24,20 +24,47 @@ end
 
 def toggle_tiles(tile_y, tile_x, board)
   board[tile_y][tile_x] = ((board[tile_y][tile_x] - 1)* -1)
+
+  if tile_y == 0
+    board[tile_y + 1][tile_x] = ((board[tile_y + 1][tile_x] - 1)* -1)
+  elsif tile_y == board.length - 1
+    board[tile_y - 1][tile_x] = ((board[tile_y - 1][tile_x] - 1)* -1)
+  end
+
+  if tile_y > 0 && tile_y < board.length - 1
+    board[tile_y + 1][tile_x] = ((board[tile_y + 1][tile_x] - 1)* -1)
+    board[tile_y - 1][tile_x] = ((board[tile_y - 1][tile_x] - 1)* -1)
+  end
+
+  if tile_x < board[tile_y].length - 1 && tile_x > 0
+    board[tile_y][tile_x - 1] = ((board[tile_y][tile_x - 1] - 1)* -1)
+    board[tile_y][tile_x + 1] = ((board[tile_y][tile_x + 1] - 1)* -1)
+  end
+
+  if tile_x == 0
+    board[tile_y][tile_x + 1] = ((board[tile_y][tile_x + 1] - 1)* -1)
+  elsif tile_x == board[tile_y].length - 1
+    board[tile_y][tile_x - 1] = ((board[tile_y][tile_x - 1] - 1)* -1)
+  end
+
   unless tile_y == 0 || tile_x == 0 || tile_y == board.length - 1 || tile_x == board[0].length - 1
     board[tile_y + 1][tile_x] -= 1; board[tile_y + 1][tile_x] *= -1
     board[tile_y - 1][tile_x] -= 1; board[tile_y - 1][tile_x] *= -1
     board[tile_y][tile_x + 1] -= 1; board[tile_y][tile_x + 1] *= -1
     board[tile_y][tile_x - 1] -= 1; board[tile_y][tile_x - 1] *= -1
   end
-  if tile_y == board.last
-    board[tile_y - 1][tile_x] = ((board[tile_y - 1][tile_x] - 1)* -1)
-  end
 end
 
 until game_over do
   Gem.win_platform? ? (system "cls") : (system "clear")
+  if board.flatten.all? {|x| x == 1}
+    game_over = true
+    puts "COMPLETE!"
+    break
+  end
   puts "current board: "
-  board.each_with_index { |x| puts "#{x}" }
-  shoot
+  board.each do |n|
+    puts n.each {|p| p }.join(' ')
+  end
+  shoot(board)
 end
